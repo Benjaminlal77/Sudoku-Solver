@@ -192,27 +192,12 @@ class SudokuBoard:
         self.outline = BoardOutline()
         self.boxes = [Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
 
-        # self.num_board = [
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0],
-        #     [0,0,0,0,0,0,0,0,0]
-        # ]
-
-        self.randomize_board()
+        self.randomize()
         
         for box in self.boxes:
             box.prep_num()
-    
-    def randomize_board(self):
-        self.randomize_nums()
                     
-    def randomize_nums(self):
+    def randomize(self):
         box = self.find_empty_box()
         
         if not box:
@@ -225,17 +210,18 @@ class SudokuBoard:
             else:
                 continue
                 
-            if self.is_valid(box, num_to_try):
+            if self.num_is_valid(box, num_to_try):
                 box.correct_num = num_to_try
-                if self.randomize_nums():
+                if self.randomize():
                     return True
                     
                 box.correct_num = None
+                continue
                     
         box.nums_tried.clear()
         return False
                     
-    def is_valid(self, box, num_to_try):
+    def num_is_valid(self, box, num_to_try):
         for other_box in self.boxes:
             if box == other_box:
                 continue

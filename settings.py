@@ -20,7 +20,7 @@ class BoardBoxSettings:
     text_font_size = int(box_size - 1)
 
 class GameSettings:
-    screen_width, screen_height = 600, 550
+    screen_width, screen_height = 454, 550
     bg_color = (255, 255, 255)
-    FPS = 2
+    FPS = 20
     
