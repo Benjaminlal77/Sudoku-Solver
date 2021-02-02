@@ -1,6 +1,7 @@
 import pygame 
 import random
 from settings import BoardSettings, BoardBoxSettings
+import time
         
 class BoardOutline:
     def __init__(self):
@@ -16,15 +17,16 @@ class BoardOutline:
 class Box:
     def __init__(self, box_num):
         self.box_num = box_num
-        self.correct_num = random.randint(1,9)
+        self.nums_tried = []
+        self.correct_num = None
         
         self.column = self.get_column()
         self.row = self.get_row()
+        self.large_box = self.get_large_box()
         self.x, self.y = self.get_cords()
         
         self.make_border()
         self.make_box()
-        self.prep_num()
         
     def get_column(self):
         if self.box_num % SudokuBoard.num_of_boxes_in_column == 1:
@@ -64,6 +66,28 @@ class Box:
         elif self.box_num <= SudokuBoard.num_of_boxes_in_row * 8:
             return 8
         elif self.box_num <= SudokuBoard.num_of_boxes_in_row * 9:
+            return 9
+        
+    def get_large_box(self):
+        if self.is_in_first_large_box_column() and self.is_in_first_large_box_row():
+            return 1
+        elif self.is_in_second_large_box_column() and self.is_in_first_large_box_row():
+            return 2
+        elif self.is_in_third_large_box_column() and self.is_in_first_large_box_row():
+            return 3
+            
+        elif self.is_in_first_large_box_column() and self.is_in_second_large_box_row():
+            return 4
+        elif self.is_in_second_large_box_column() and self.is_in_second_large_box_row():
+            return 5
+        elif self.is_in_third_large_box_column() and self.is_in_second_large_box_row():
+            return 6
+        
+        elif self.is_in_first_large_box_column() and self.is_in_third_large_box_row():
+            return 7
+        elif self.is_in_second_large_box_column() and self.is_in_third_large_box_row():
+            return 8
+        elif self.is_in_third_large_box_column() and self.is_in_third_large_box_row():
             return 9
         
     def is_in_first_large_box_column(self):
@@ -160,15 +184,81 @@ class Box:
         screen.blit(self.num_image, self.num_image_rect)
         
 class SudokuBoard:
+    num_of_possible_nums = 9
     num_of_boxes_in_column = 9
     num_of_boxes_in_row = 9
-    num_of_boxes = 81
+    num_of_boxes = num_of_boxes_in_column * num_of_boxes_in_row
     def __init__(self):
         self.outline = BoardOutline()
-        self.boxes = [Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]
+        self.boxes = [Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
+
+        # self.num_board = [
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0],
+        #     [0,0,0,0,0,0,0,0,0]
+        # ]
+
+        self.randomize_board()
         
+        for box in self.boxes:
+            box.prep_num()
+    
+    def randomize_board(self):
+        self.randomize_nums()
+                    
+    def randomize_nums(self):
+        box = self.find_empty_box()
+        
+        if not box:
+            return True
+        
+        while len(box.nums_tried) < 9:
+            num_to_try = random.randint(1, SudokuBoard.num_of_possible_nums)
+            if num_to_try not in box.nums_tried:
+                box.nums_tried.append(num_to_try)
+            else:
+                continue
+                
+            if self.is_valid(box, num_to_try):
+                box.correct_num = num_to_try
+                if self.randomize_nums():
+                    return True
+                    
+                box.correct_num = None
+                    
+        box.nums_tried.clear()
+        return False
+                    
+    def is_valid(self, box, num_to_try):
+        for other_box in self.boxes:
+            if box == other_box:
+                continue
+            
+            if box.row == other_box.row:
+                if num_to_try == other_box.correct_num:
+                    return False
+            if box.column == other_box.column:
+                if num_to_try == other_box.correct_num:
+                    return False
+            if box.large_box == other_box.large_box:
+                if num_to_try == other_box.correct_num:
+                    return False
+
+        return True
+                    
+    def find_empty_box(self):
+        for box in self.boxes:
+            if box.correct_num == None:
+                return box
+                
     def draw_board(self, screen):
         self.outline.draw_outline(screen)
         for box in self.boxes:
             box.draw_box(screen)
-    
+            
