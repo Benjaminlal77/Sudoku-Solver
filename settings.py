@@ -2,9 +2,12 @@ class BoardSettings:
     size = 454
     width = size
     height = size
+    
     outline_color = (0, 0, 0)
     outline_size = 1
     num_of_outline_border = 4
+    
+    boxes_solved_to_start = 30
 
 class BoardBoxSettings:
     num_of_boxes_per_section = 9

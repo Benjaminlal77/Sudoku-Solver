@@ -21,6 +21,7 @@ class SudokuBoard:
             self.box_num = box_num
             self.nums_tried = []
             self.correct_num = None
+            self.solved = False
             
             self.column = self.get_column()
             self.row = self.get_row()
@@ -183,7 +184,8 @@ class SudokuBoard:
         def draw_box(self, screen):
             screen.fill(self.border_color, self.border)
             screen.fill(self.box_color, self.box)
-            screen.blit(self.num_image, self.num_image_rect)
+            if self.solved:
+                screen.blit(self.num_image, self.num_image_rect)
     
     num_of_possible_nums = 9
     num_of_boxes_in_column = 9
@@ -192,6 +194,7 @@ class SudokuBoard:
     def __init__(self):
         self.outline = self.BoardOutline()
         self.boxes = [self.Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
+        self.boxes_solved = 0
 
         self.randomize_board()
         
@@ -244,8 +247,16 @@ class SudokuBoard:
                         
             box.nums_tried.clear()
             return False
-                        
+                      
+        def randomize_nums_solved():
+            while self.boxes_solved < BoardSettings.boxes_solved_to_start:
+                for box in self.boxes:
+                    if random.randint(1, SudokuBoard.num_of_boxes) == 1:
+                        self.boxes_solved += 1
+                        box.solved = True
+                
         randomize()
+        randomize_nums_solved()
                 
     def draw_board(self, screen):
         self.outline.draw_outline(screen)
