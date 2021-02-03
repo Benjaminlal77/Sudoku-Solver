@@ -18,6 +18,7 @@ class BoardBoxSettings:
     border_size = 1
     border_width = border_height = box_size
     border_color = (190, 198, 212)
+    selected_border_color = (0, 122, 204)
     
     text_color = (0, 0, 0)
     text_font_size = int(box_size - 1)

@@ -15,5 +15,5 @@ game_objects = {
 }
 
 while True:
-    check_events()
+    check_events(game_objects)
     update_screen(screen, game_objects)

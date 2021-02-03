@@ -1,8 +1,7 @@
 import pygame 
 import random
-from settings import BoardSettings, BoardBoxSettings
-import time
-                
+
+from settings import BoardSettings, BoardBoxSettings         
 
 class SudokuBoard:
     class BoardOutline:
@@ -19,14 +18,16 @@ class SudokuBoard:
     class Box:
         def __init__(self, box_num):
             self.box_num = box_num
-            self.nums_tried = []
-            self.correct_num = None
-            self.solved = False
             
             self.column = self.get_column()
             self.row = self.get_row()
             self.large_box = self.get_large_box()
             self.x, self.y = self.get_cords()
+            
+            self.nums_tried = []
+            self.correct_num = None
+            self.solved = False
+            self.selected = False
             
             self.make_border()
             self.make_box()
@@ -129,25 +130,26 @@ class SudokuBoard:
             else:
                 return False
             
-        def find_outlines_passed(self):
-            self.num_of_column_outline_passed = 0
-            self.num_of_row_outline_passed = 0
-            if self.is_in_first_large_box_column():
-                self.num_of_column_outline_passed = 1
-            elif self.is_in_second_large_box_column():
-                self.num_of_column_outline_passed = 2   
-            elif self.is_in_third_large_box_column():
-                self.num_of_column_outline_passed = 3
-                
-            if self.is_in_first_large_box_row():
-                self.num_of_row_outline_passed = 1
-            elif self.is_in_second_large_box_row():
-                self.num_of_row_outline_passed = 2
-            elif self.is_in_third_large_box_row():
-                self.num_of_row_outline_passed = 3
-            
+           
         def get_cords(self):
-            self.find_outlines_passed()
+            def find_outlines_passed():
+                self.num_of_column_outline_passed = 0
+                self.num_of_row_outline_passed = 0
+                if self.is_in_first_large_box_column():
+                    self.num_of_column_outline_passed = 1
+                elif self.is_in_second_large_box_column():
+                    self.num_of_column_outline_passed = 2   
+                elif self.is_in_third_large_box_column():
+                    self.num_of_column_outline_passed = 3
+                    
+                if self.is_in_first_large_box_row():
+                    self.num_of_row_outline_passed = 1
+                elif self.is_in_second_large_box_row():
+                    self.num_of_row_outline_passed = 2
+                elif self.is_in_third_large_box_row():
+                    self.num_of_row_outline_passed = 3
+         
+            find_outlines_passed()
                 
             x = ((self.column * BoardBoxSettings.box_width)
                 - BoardBoxSettings.box_width) + (BoardSettings.outline_size * self.num_of_column_outline_passed)
@@ -187,6 +189,17 @@ class SudokuBoard:
             if self.solved:
                 screen.blit(self.num_image, self.num_image_rect)
     
+        def is_clicked(self):
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if self.box.collidepoint(mouse_x, mouse_y):
+                return True
+            else:
+                return False
+
+        def check_if_solved(self, num_input):
+            if num_input == self.correct_num:
+                self.solved = True
+            
     num_of_possible_nums = 9
     num_of_boxes_in_column = 9
     num_of_boxes_in_row = 9
