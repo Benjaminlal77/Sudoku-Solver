@@ -8,15 +8,18 @@ def update_screen(screen, game_objects):
             if box.selected:
                 box.border_color = BoardBoxSettings.selected_border_color
             else:
-                box.border_color = BoardBoxSettings.border_color
+                box.border_color = BoardBoxSettings.border_color          
     
     sudoku_board = game_objects['sudoku_board']
+    strikes = game_objects['strikes']
     
     update_boxes()
     
     screen.fill(GameSettings.bg_color)
     
     sudoku_board.draw_board(screen)
+    for strike in strikes:
+        strike.draw_strike(screen)
     
     pygame.display.flip()
     clock.tick(GameSettings.FPS)

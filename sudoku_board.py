@@ -196,9 +196,11 @@ class SudokuBoard:
             else:
                 return False
 
-        def check_if_solved(self, num_input):
+        def is_solved(self, num_input):
             if num_input == self.correct_num:
-                self.solved = True
+                return True
+            else:
+                return False
             
     num_of_possible_nums = 9
     num_of_boxes_in_column = 9
