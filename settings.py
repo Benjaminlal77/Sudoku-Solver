@@ -1,5 +1,6 @@
 class GameSettings:
     screen_width, screen_height = 454, 550
+    screen_center = (screen_width/2, screen_height/2)
     bg_color = (255, 255, 255)
     FPS = 20
     
@@ -27,12 +28,9 @@ class BoardBoxSettings:
     border_color = (190, 198, 212)
     selected_border_color = (0, 122, 204)
     
-    text_color = (0, 0, 0)
-    text_font_size = int(box_size - 1)
-    
 class StrikeSettings:
     margin = 5
 
-    size = 40
+    size = 45
     width = height = size
     

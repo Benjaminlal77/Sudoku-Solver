@@ -2,6 +2,7 @@ import pygame
 import random
 
 from settings import BoardSettings, BoardBoxSettings         
+from Text_class import Text
 
 class SudokuBoard:
     class BoardOutline:
@@ -175,19 +176,18 @@ class SudokuBoard:
             self.border_color = BoardBoxSettings.border_color
             
         def prep_num(self):
-            self.text_color = BoardBoxSettings.text_color
-            self.font = pygame.font.SysFont(None, BoardBoxSettings.text_font_size)
+            text = self.correct_num
+            text_size = self.box.width - 1
+            text_color = (0, 0, 0)
+            text_cords = self.box.center
             
-            self.num_image = self.font.render(str(self.correct_num), True, 
-                                            self.text_color, self.box_color)
-            self.num_image_rect = self.num_image.get_rect()
-            self.num_image_rect.center = self.box.center
+            self.num_text = Text(text, text_size, text_color, text_cords)
             
         def draw_box(self, screen):
             screen.fill(self.border_color, self.border)
             screen.fill(self.box_color, self.box)
             if self.solved:
-                screen.blit(self.num_image, self.num_image_rect)
+                screen.blit(self.num_text.text_image, self.num_text.text_rect)
     
         def is_clicked(self):
             mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -210,6 +210,7 @@ class SudokuBoard:
         self.outline = self.BoardOutline()
         self.boxes = [self.Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
         self.boxes_solved = 0
+        self.solved = False
 
         self.randomize_board()
         
@@ -266,7 +267,7 @@ class SudokuBoard:
         def randomize_nums_solved():
             while self.boxes_solved < BoardSettings.boxes_solved_to_start:
                 for box in self.boxes:
-                    if random.randint(1, SudokuBoard.num_of_boxes) == 1:
+                    if random.randint(1, SudokuBoard.num_of_boxes) == 1 and not box.solved:
                         self.boxes_solved += 1
                         box.solved = True
                 
@@ -277,4 +278,13 @@ class SudokuBoard:
         self.outline.draw_outline(screen)
         for box in self.boxes:
             box.draw_box(screen)
+            
+    def check_if_solved(self):
+        for box in self.boxes:
+            if box.solved:
+                if box.box_num == SudokuBoard.num_of_boxes:
+                    self.solved = True
+            else:
+                self.solved = False
+                break
             

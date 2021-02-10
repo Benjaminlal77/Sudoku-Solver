@@ -131,3 +131,5 @@ def check_events(game_objects, stats):
         if event.type == pygame.KEYDOWN:
             check_key_press()
             
+def check_button_events():
+    pass
