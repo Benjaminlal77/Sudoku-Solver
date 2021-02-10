@@ -2,7 +2,7 @@ import pygame
 import random
 
 from settings import BoardSettings, BoardBoxSettings         
-from Text_class import Text
+from text_class import Text
 
 class SudokuBoard:
     class BoardOutline:

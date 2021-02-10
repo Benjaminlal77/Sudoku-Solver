@@ -1,6 +1,6 @@
 import pygame
 from settings import GameSettings
-from Text_class import Text
+from text_class import Text
 
 def write_result(screen, result):
     text = result

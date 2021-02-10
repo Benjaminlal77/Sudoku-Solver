@@ -8,9 +8,8 @@ class GameSettings:
 
 class BoardSettings:
     size = 454
-    width = size
-    height = size
-    
+    width = height = size
+      
     outline_color = (0, 0, 0)
     outline_size = 1
     num_of_outline_border = 4
@@ -27,10 +26,3 @@ class BoardBoxSettings:
     border_width = border_height = box_size
     border_color = (190, 198, 212)
     selected_border_color = (0, 122, 204)
-    
-class StrikeSettings:
-    margin = 5
-
-    size = 45
-    width = height = size
-    
