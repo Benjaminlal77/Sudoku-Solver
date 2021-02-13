@@ -5,7 +5,12 @@ from text_class import Text
 def write_result(screen, result):
     text = result
     text_size = 100
-    text_color = (255, 0, 0)
+    
+    if result == 'You win!':
+        text_color = (0, 255, 0)
+    elif result == 'You lose!':
+        text_color = (255, 0, 0)
+        
     text_cords = GameSettings.screen_center
     text_bg = (0, 0, 0)
     
@@ -20,9 +25,8 @@ def check_if_game_over(screen, game_objects, stats):
     sudoku_board.check_if_solved()
     if sudoku_board.solved:
         stats.game_active = False
-        print(stats.game_active)
-        write_result(screen, 'You win')
+        write_result(screen, 'You win!')
         
-    elif len(strikes) == 3:
+    elif len(strikes) == GameSettings.max_strikes:
         stats.game_active = False
         write_result(screen, 'You lose!')

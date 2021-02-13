@@ -7,7 +7,7 @@ class Strike(Sprite):
         super().__init__()
         self.strike_num = strike_num
         self.margin = 10
-        self.size = 60
+        self.size = 50
         self.width = self.height = self.size
         
         self.rect = pygame.Rect(0, 0, 0, 0)

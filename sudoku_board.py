@@ -274,6 +274,14 @@ class SudokuBoard:
         randomize()
         randomize_nums_solved()
                 
+    def reset(self):
+        self.boxes_solved = 0
+        for box in self.boxes:   
+            box.selected = False  
+            box.correct_num = None
+            box.nums_tried.clear()
+            box.solved = False   
+        
     def draw_board(self, screen):
         self.outline.draw_outline(screen)
         for box in self.boxes:

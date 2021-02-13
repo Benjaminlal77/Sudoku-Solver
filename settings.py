@@ -1,10 +1,11 @@
 class GameSettings:
-    screen_width, screen_height = 454, 550
+    screen_width, screen_height = 454, 575
     screen_center = (screen_width/2, screen_height/2)
     bg_color = (255, 255, 255)
     FPS = 20
     
     max_strikes = 3
+    num_of_buttons = 3
 
 class BoardSettings:
     size = 454
@@ -14,7 +15,7 @@ class BoardSettings:
     outline_size = 1
     num_of_outline_border = 4
     
-    boxes_solved_to_start = 30
+    boxes_solved_to_start = 35
 
 class BoardBoxSettings:
     num_of_boxes_per_section = 9
@@ -26,3 +27,11 @@ class BoardBoxSettings:
     border_width = border_height = box_size
     border_color = (190, 198, 212)
     selected_border_color = (0, 122, 204)
+
+class ButtonSettings:
+    margin = 5
+    margin_area = GameSettings.num_of_buttons * margin
+    width = int(GameSettings.screen_width/GameSettings.num_of_buttons - margin_area)
+    height = 45
+    size = (width, height)
+    

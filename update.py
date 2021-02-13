@@ -1,5 +1,3 @@
-from time import time
-import pygame
 from settings import GameSettings, BoardBoxSettings
 
 def update_screen(screen, game_objects):
@@ -27,5 +25,7 @@ def update_screen(screen, game_objects):
     
     draw_game_objects()
     
-    pygame.display.flip()
+def draw_buttons(screen, game_objects):
+    randomize_button = game_objects['randomize_button']
+    randomize_button.button.draw_button(screen)
     

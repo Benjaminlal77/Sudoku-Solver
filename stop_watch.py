@@ -57,6 +57,9 @@ class StopWatch:
         self.secs_run = secs_left_in(self.elasped_secs)
         update_text()
         
+    def reset(self):
+        self.start()
+        
     def draw_time_clock(self, screen):
         screen.blit(self.time_text.text_image, self.time_text.text_rect)
         
