@@ -27,5 +27,8 @@ def update_screen(screen, game_objects):
     
 def draw_buttons(screen, game_objects):
     randomize_button = game_objects['randomize_button']
+    solve_button = game_objects['solve_button']
+    
     randomize_button.button.draw_button(screen)
+    solve_button.button.draw_button(screen)
     

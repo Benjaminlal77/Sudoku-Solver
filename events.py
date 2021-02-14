@@ -2,11 +2,15 @@ from strikes import Strike
 import pygame
 import sys
 
-def check_mouse_click(game_objects, stats):
+def check_mouse_click(screen, game_objects, stats):
     def check_for_button_click():
         randomize_button = game_objects['randomize_button']
+        solve_button = game_objects['solve_button']
+        
         if randomize_button.button.is_clicked():
             randomize_button.randomize(game_objects, stats)
+        elif solve_button.button.is_clicked():
+            solve_button.solve(screen, game_objects, stats)
 
     def check_for_box_select():
         sudoku_board = game_objects['sudoku_board']
@@ -20,7 +24,7 @@ def check_mouse_click(game_objects, stats):
         check_for_box_select()
     check_for_button_click()
     
-def check_events(game_objects, stats):
+def check_events(screen, game_objects, stats):
     def check_key_press():
         if event.key == pygame.K_1:
             for box in sudoku_board.boxes:
@@ -137,7 +141,7 @@ def check_events(game_objects, stats):
             sys.exit()  
         
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            check_mouse_click(game_objects, stats)
+            check_mouse_click(screen, game_objects, stats)
             
         elif stats.game_active:
             if event.type == pygame.KEYDOWN:

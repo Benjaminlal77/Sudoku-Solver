@@ -1,6 +1,8 @@
 import pygame 
 import random
 
+from update import update_screen
+
 from settings import BoardSettings, BoardBoxSettings         
 from text_class import Text
 
@@ -282,10 +284,50 @@ class SudokuBoard:
             box.nums_tried.clear()
             box.solved = False   
         
-    def draw_board(self, screen):
-        self.outline.draw_outline(screen)
-        for box in self.boxes:
-            box.draw_box(screen)
+    def solve(self, screen, game_objects):
+        def num_is_valid():
+            for other_box in self.boxes:
+                if box == other_box:
+                    continue
+                
+                if box.row == other_box.row:
+                    if num_to_try == other_box.correct_num:
+                        return False
+                if box.column == other_box.column:
+                    if num_to_try == other_box.correct_num:
+                        return False
+                if box.large_box == other_box.large_box:
+                    if num_to_try == other_box.correct_num:
+                        return False
+
+            return True
+        
+        def find_empty_box():
+            for box in self.boxes:
+                if box.correct_num == None:
+                    return box
+                
+        box = find_empty_box()
+        if not box:
+            return True
+        
+        for num_to_try in range(1, SudokuBoard.num_of_possible_nums + 1):  
+                          
+            if num_is_valid():
+                box.correct_num = num_to_try
+                box.solved = True
+                box.prep_num()
+                update_screen(screen, game_objects)
+                pygame.display.flip()
+                pygame.time.Clock().tick(10)
+                
+                if self.solve(screen, game_objects):
+                    return True
+                
+                box.correct_num = None
+                box.solved = False
+            
+        return False
             
     def check_if_solved(self):
         for box in self.boxes:
@@ -295,4 +337,9 @@ class SudokuBoard:
             else:
                 self.solved = False
                 break
+    
+    def draw_board(self, screen):
+        self.outline.draw_outline(screen)
+        for box in self.boxes:
+            box.draw_box(screen)
             

@@ -47,3 +47,15 @@ class RandomizeButton:
             box.prep_num()
         stats.game_active = True
         
+class SolveButton:
+    def __init__(self):
+        self.button = Button(2, 'Solve')
+        
+    def solve(self, screen, game_objects, stats):
+        sudoku_board = game_objects['sudoku_board']
+        for box in sudoku_board.boxes:
+            if not box.solved:
+                box.correct_num = None
+                
+        sudoku_board.solve(screen, game_objects)
+    
