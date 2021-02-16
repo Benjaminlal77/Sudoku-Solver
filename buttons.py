@@ -1,7 +1,7 @@
 import pygame
 
 from settings import GameSettings, ButtonSettings
-from text_class import Text
+from text_box import Text
     
 class Button:
     def __init__(self, button_num, text):
@@ -57,5 +57,8 @@ class SolveButton:
             if not box.solved:
                 box.correct_num = None
                 
-        sudoku_board.solve(screen, game_objects)
+        sudoku_board.solve(screen, game_objects, stats)
+        stats.fast_solve = False
+        stats.game_active = False
+        stats.end_by_solve_button = True
     

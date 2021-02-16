@@ -1,4 +1,4 @@
-from text_class import Text
+from text_box import Text
 from datetime import datetime
 from settings import BoardSettings
 

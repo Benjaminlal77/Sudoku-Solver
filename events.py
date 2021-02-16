@@ -146,3 +146,13 @@ def check_events(screen, game_objects, stats):
         elif stats.game_active:
             if event.type == pygame.KEYDOWN:
                 check_key_press()
+
+def check_events_while_solving(stats):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+            
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                stats.fast_solve = True
+                

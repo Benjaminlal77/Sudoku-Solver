@@ -1,10 +1,10 @@
 import pygame 
 import random
 
-from update import update_screen
-
-from settings import BoardSettings, BoardBoxSettings         
-from text_class import Text
+from events import check_events_while_solving
+from update import update_screen_while_solving
+from settings import BoardSettings, BoardBoxSettings        
+from text_box import Text
 
 class SudokuBoard:
     class BoardOutline:
@@ -211,8 +211,10 @@ class SudokuBoard:
     def __init__(self):
         self.outline = self.BoardOutline()
         self.boxes = [self.Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
+        
         self.boxes_solved = 0
         self.solved = False
+        self.solve_speed = BoardSettings.solve_speed
 
         self.randomize_board()
         
@@ -284,7 +286,7 @@ class SudokuBoard:
             box.nums_tried.clear()
             box.solved = False   
         
-    def solve(self, screen, game_objects):
+    def solve(self, screen, game_objects, stats):
         def num_is_valid():
             for other_box in self.boxes:
                 if box == other_box:
@@ -306,7 +308,7 @@ class SudokuBoard:
             for box in self.boxes:
                 if box.correct_num == None:
                     return box
-                
+        
         box = find_empty_box()
         if not box:
             return True
@@ -317,15 +319,21 @@ class SudokuBoard:
                 box.correct_num = num_to_try
                 box.solved = True
                 box.prep_num()
-                update_screen(screen, game_objects)
-                pygame.display.flip()
-                pygame.time.Clock().tick(10)
+
+                check_events_while_solving(stats)
+                if not stats.fast_solve:
+                    update_screen_while_solving(screen, game_objects)
+
+                    pygame.display.flip()
+                    pygame.time.Clock().tick(self.solve_speed)
                 
-                if self.solve(screen, game_objects):
+                if self.solve(screen, game_objects, stats):
                     return True
                 
                 box.correct_num = None
                 box.solved = False
+                box.border_color = (255, 0, 0)
+                box.make_border()
             
         return False
             
