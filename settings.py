@@ -8,14 +8,14 @@ class GameSettings:
     num_of_buttons = 3
 
 class BoardSettings:
-    size = 454
+    size = GameSettings.screen_width
     width = height = size
       
     outline_color = (0, 0, 0)
     outline_size = 1
     num_of_outline_border = 4
     
-    boxes_solved_to_start = 38
+    boxes_solved_to_start = 35
     
     solve_speed = 10
 
@@ -31,9 +31,10 @@ class BoardBoxSettings:
     selected_border_color = (0, 122, 204)
 
 class ButtonSettings:
-    margin = 5
-    margin_area = GameSettings.num_of_buttons * margin
-    width = int(GameSettings.screen_width/GameSettings.num_of_buttons - margin_area)
+    margin = 10
+    margin_area = (GameSettings.num_of_buttons * margin) + margin
+    left_over_space = GameSettings.screen_width - margin_area
+    width = int(left_over_space/GameSettings.num_of_buttons)
     height = 45
     size = (width, height)
     

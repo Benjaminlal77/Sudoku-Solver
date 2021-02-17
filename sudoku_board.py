@@ -21,6 +21,7 @@ class SudokuBoard:
     class Box:
         def __init__(self, box_num):
             self.box_num = box_num
+            self.unsolved_box_num = 0
             
             self.column = self.get_column()
             self.row = self.get_row()
@@ -221,31 +222,31 @@ class SudokuBoard:
         for box in self.boxes:
             box.prep_num()
     
+    def find_empty_box(self):
+        for box in self.boxes:
+            if box.correct_num == None:
+                return box
+    
+    def num_is_valid(self, box, num_to_try):
+        for other_box in self.boxes:
+            if box == other_box:
+                continue
+            
+            if box.row == other_box.row:
+                if num_to_try == other_box.correct_num:
+                    return False
+            if box.column == other_box.column:
+                if num_to_try == other_box.correct_num:
+                    return False
+            if box.large_box == other_box.large_box:
+                if num_to_try == other_box.correct_num:
+                    return False
+
+        return True
+    
     def randomize_board(self):
-        def randomize():
-            def num_is_valid():
-                for other_box in self.boxes:
-                    if box == other_box:
-                        continue
-                    
-                    if box.row == other_box.row:
-                        if num_to_try == other_box.correct_num:
-                            return False
-                    if box.column == other_box.column:
-                        if num_to_try == other_box.correct_num:
-                            return False
-                    if box.large_box == other_box.large_box:
-                        if num_to_try == other_box.correct_num:
-                            return False
-
-                return True
-                            
-            def find_empty_box():
-                for box in self.boxes:
-                    if box.correct_num == None:
-                        return box
-
-            box = find_empty_box()
+        def randomize():    
+            box = self.find_empty_box()
             
             if not box:
                 return True
@@ -257,7 +258,7 @@ class SudokuBoard:
                 else:
                     continue
                     
-                if num_is_valid():
+                if self.num_is_valid(box, num_to_try):
                     box.correct_num = num_to_try
                     if randomize():
                         return True
@@ -287,35 +288,17 @@ class SudokuBoard:
             box.solved = False   
         
     def solve(self, screen, game_objects, stats):
-        def num_is_valid():
-            for other_box in self.boxes:
-                if box == other_box:
-                    continue
-                
-                if box.row == other_box.row:
-                    if num_to_try == other_box.correct_num:
-                        return False
-                if box.column == other_box.column:
-                    if num_to_try == other_box.correct_num:
-                        return False
-                if box.large_box == other_box.large_box:
-                    if num_to_try == other_box.correct_num:
-                        return False
-
-            return True
-        
-        def find_empty_box():
-            for box in self.boxes:
-                if box.correct_num == None:
-                    return box
-        
-        box = find_empty_box()
+        box = self.find_empty_box()
+                    
         if not box:
             return True
         
+        if box.unsolved_box_num == 1 and len(box.nums_tried) == 9:
+            return False
+        
         for num_to_try in range(1, SudokuBoard.num_of_possible_nums + 1):  
-                          
-            if num_is_valid():
+            box.nums_tried.append(num_to_try)
+            if self.num_is_valid(box, num_to_try):
                 box.correct_num = num_to_try
                 box.solved = True
                 box.prep_num()
@@ -346,6 +329,13 @@ class SudokuBoard:
                 self.solved = False
                 break
     
+    def update_unsolved_boxes(self):
+        unsolved_box_num = 0
+        for box in self.boxes:
+            if not box.solved:
+                unsolved_box_num += 1
+                box.unsolved_box_num = unsolved_box_num
+                    
     def draw_board(self, screen):
         self.outline.draw_outline(screen)
         for box in self.boxes:

@@ -17,6 +17,14 @@ class FastSolveTextBox:
         self.text.text_rect.centerx = GameSettings.screen_width/2
         self.text.text_rect.centery = GameSettings.screen_height - 60
         
-    def write_text(self,screen):
+    def write_text(self, screen):
         screen.blit(self.text.text_image, self.text.text_rect)
     
+class ImpossibleBoardTextBox:
+    def __init__(self) -> None:
+        self.text = Text('Impossible Board', 30, (255, 0, 0), (0,0))
+        self.text.text_rect.centerx = GameSettings.screen_width/2
+        self.text.text_rect.centery = GameSettings.screen_height - 80
+        
+    def write_text(self, screen):
+        screen.blit(self.text.text_image, self.text.text_rect)

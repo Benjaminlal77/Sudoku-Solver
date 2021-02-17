@@ -60,6 +60,6 @@ class StopWatch:
     def reset(self):
         self.start()
         
-    def draw_time_clock(self, screen):
+    def draw_stop_watch(self, screen):
         screen.blit(self.time_text.text_image, self.time_text.text_rect)
         

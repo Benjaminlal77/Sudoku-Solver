@@ -6,3 +6,5 @@ class GameStats:
         self.fast_solve = False
         self.end_by_solve_button = False
     
+        self.creating_board = False
+    

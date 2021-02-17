@@ -40,12 +40,16 @@ class RandomizeButton:
 
         strikes.empty()
         stats.strikes = 0
+        
         stop_watch.reset()
+        
         sudoku_board.reset()
         sudoku_board.randomize_board()
         for box in sudoku_board.boxes:
             box.prep_num()
+        
         stats.game_active = True
+        stats.creating_board = False
         
 class SolveButton:
     def __init__(self):
@@ -57,8 +61,21 @@ class SolveButton:
             if not box.solved:
                 box.correct_num = None
                 
-        sudoku_board.solve(screen, game_objects, stats)
+        sudoku_board.update_unsolved_boxes()
+        sudoku_board.solve(screen, game_objects, stats)            
+            
         stats.fast_solve = False
         stats.game_active = False
         stats.end_by_solve_button = True
+        stats.creating_button = False
     
+class CreateBoardButton:
+    def __init__(self):
+        self.button = Button(3, 'Create Board')
+    
+    def create_board(self, game_objects, stats):
+        sudoku_board = game_objects['sudoku_board']
+        
+        sudoku_board.reset()
+        stats.creating_board = True
+        stats.game_active = True
