@@ -15,7 +15,7 @@ class BoardSettings:
     outline_size = 1
     num_of_outline_border = 4
     
-    boxes_solved_to_start = 35
+    boxes_solved_to_start = 80
     
     solve_speed = 10
 

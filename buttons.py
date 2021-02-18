@@ -63,11 +63,12 @@ class SolveButton:
                 
         sudoku_board.update_unsolved_boxes()
         sudoku_board.solve(screen, game_objects, stats)            
+        sudoku_board.check_if_solved()
             
         stats.fast_solve = False
         stats.game_active = False
         stats.end_by_solve_button = True
-        stats.creating_button = False
+        stats.creating_board = False
     
 class CreateBoardButton:
     def __init__(self):
@@ -77,5 +78,6 @@ class CreateBoardButton:
         sudoku_board = game_objects['sudoku_board']
         
         sudoku_board.reset()
+        stats.end_by_solve_button = False
         stats.creating_board = True
         stats.game_active = True

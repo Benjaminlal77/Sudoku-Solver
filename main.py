@@ -34,7 +34,7 @@ game_objects = {
 while True:
     if stats.creating_board:
         check_events_while_creating_board(screen, game_objects, stats)
-        update_screen_while_creating_board(screen, game_objects)
+        update_screen_while_creating_board(screen, game_objects, stats)
         pygame.display.flip()
         pygame.time.Clock().tick(GameSettings.FPS)
     

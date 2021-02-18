@@ -22,6 +22,7 @@ def write_result(screen, result):
 def check_if_game_over(screen, game_objects, stats):
     sudoku_board = game_objects['sudoku_board']
     strikes = game_objects['strikes']
+    sudoku_board.check_if_solved()
     if sudoku_board.solved:
         stats.game_active = False
         if not stats.end_by_solve_button:
