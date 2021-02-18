@@ -1,5 +1,5 @@
 from settings import GameSettings, BoardBoxSettings
-from text_box import FastSolveTextBox, ImpossibleBoardTextBox
+from text_box import CreateBoardControlsTextBox, FastSolveTextBox, ImpossibleBoardTextBox
 
 def update_boxes(game_objects):
     sudoku_board = game_objects['sudoku_board']
@@ -9,7 +9,7 @@ def update_boxes(game_objects):
         else:
             box.border_color = BoardBoxSettings.border_color 
                 
-def update_screen(screen, game_objects):         
+def update_screen(screen, game_objects, stats):         
     def draw_game_objects():
         strikes = game_objects['strikes']
         randomize_button = game_objects['randomize_button']
@@ -29,7 +29,8 @@ def update_screen(screen, game_objects):
     stop_watch = game_objects['stop_watch']
     
     update_boxes(game_objects)
-    stop_watch.update()
+    if not stats.end_by_solve_button:
+        stop_watch.update()
     
     screen.fill(GameSettings.bg_color)
     
@@ -51,6 +52,9 @@ def update_screen_while_creating_board(screen, game_objects, stats):
         if stats.end_by_solve_button:
             if not sudoku_board.solved:
                 ImpossibleBoardTextBox().write_text(screen)
+
+        else:
+            CreateBoardControlsTextBox().write_text(screen)
         
         randomize_button = game_objects['randomize_button']
         solve_button = game_objects['solve_button']

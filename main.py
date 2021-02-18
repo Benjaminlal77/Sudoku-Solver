@@ -45,7 +45,7 @@ while True:
     elif stats.game_active:
         check_events(screen, game_objects, stats)
         
-        update_screen(screen, game_objects)
+        update_screen(screen, game_objects, stats)
 
         check_if_game_over(screen, game_objects, stats)
         pygame.display.flip()

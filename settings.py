@@ -15,9 +15,9 @@ class BoardSettings:
     outline_size = 1
     num_of_outline_border = 4
     
-    boxes_solved_to_start = 80
+    boxes_solved_to_start = 35
     
-    solve_speed = 10
+    solve_speed = 20
 
 class BoardBoxSettings:
     num_of_boxes_per_section = 9

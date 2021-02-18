@@ -1,3 +1,4 @@
+from update import update_screen
 import pygame
 
 from settings import GameSettings, ButtonSettings
@@ -49,6 +50,7 @@ class RandomizeButton:
             box.prep_num()
         
         stats.game_active = True
+        stats.end_by_solve_button = False
         stats.creating_board = False
         
 class SolveButton:
@@ -69,6 +71,9 @@ class SolveButton:
         stats.game_active = False
         stats.end_by_solve_button = True
         stats.creating_board = False
+        
+        update_screen(screen, game_objects, stats)
+        pygame.display.flip()
     
 class CreateBoardButton:
     def __init__(self):
