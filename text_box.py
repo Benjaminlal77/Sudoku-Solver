@@ -1,4 +1,3 @@
-from stats import GameStats
 import pygame
 from settings import GameSettings
 
@@ -20,18 +19,18 @@ class FastSolveTextBox:
     def write_text(self, screen):
         screen.blit(self.text.text_image, self.text.text_rect)
     
-class ImpossibleBoardTextBox:
+class CreateBoardControlsTextBox:
     def __init__(self) -> None:
-        self.text = Text('Impossible Board', 30, (255, 0, 0), (0,0))
+        self.text = Text('Input - 1 to 9          Remove Input - 0', 30, (0, 0, 0), (0,0))
         self.text.text_rect.centerx = GameSettings.screen_width/2
         self.text.text_rect.centery = GameSettings.screen_height - 80
         
     def write_text(self, screen):
-        screen.blit(self.text.text_image, self.text.text_rect)
+        screen.blit(self.text.text_image, self.text.text_rect)    
 
-class CreateBoardControlsTextBox:
+class ImpossibleBoardTextBox:
     def __init__(self) -> None:
-        self.text = Text('Input - 1 to 9          Remove Input - 0', 30, (0, 0, 0), (0,0))
+        self.text = Text('Impossible Board', 30, (255, 0, 0), (0,0))
         self.text.text_rect.centerx = GameSettings.screen_width/2
         self.text.text_rect.centery = GameSettings.screen_height - 80
         

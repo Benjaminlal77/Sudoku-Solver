@@ -5,18 +5,27 @@ from events import check_events, check_events_while_creating_board
 from update import update_screen, update_screen_while_creating_board
 from game_over import check_if_game_over
 
-from sudoku_board import SudokuBoard
+from game_objects.sudoku_board import SudokuBoard
 from pygame.sprite import Group
-from stop_watch import StopWatch
-from buttons import RandomizeButton, SolveButton, CreateBoardButton
+from game_objects.stop_watch import StopWatch
+from game_objects.buttons import RandomizeButton, SolveButton, CreateBoardButton
 
 pygame.init()
 screen = pygame.display.set_mode((GameSettings.screen_width, GameSettings.screen_height))
+
+pygame.display.set_caption('Sudoku Solver')
+icon_image = pygame.image.load('images/icon.png')
+pygame.display.set_icon(icon_image)
+
 stats = GameStats()
+
+# Define game objects
 
 sudoku_board = SudokuBoard()
 strikes = Group()
 stop_watch = StopWatch()
+
+# Define buttons
 
 randomize_button = RandomizeButton()
 solve_button = SolveButton()
@@ -35,18 +44,18 @@ while True:
     if stats.creating_board:
         check_events_while_creating_board(screen, game_objects, stats)
         update_screen_while_creating_board(screen, game_objects, stats)
-        pygame.display.flip()
-        pygame.time.Clock().tick(GameSettings.FPS)
-    
-    elif not stats.game_active:
-        check_events(screen, game_objects, stats)            
+        
         pygame.time.Clock().tick(GameSettings.FPS)
         
     elif stats.game_active:
         check_events(screen, game_objects, stats)
-        
         update_screen(screen, game_objects, stats)
+        
+        check_if_game_over(screen, game_objects, stats)                               
+        
+        pygame.time.Clock().tick(GameSettings.FPS)
 
-        check_if_game_over(screen, game_objects, stats)
-        pygame.display.flip()
+    elif not stats.game_active:
+        check_events(screen, game_objects, stats)            
+        
         pygame.time.Clock().tick(GameSettings.FPS)

@@ -1,2 +1,2 @@
 # Sudoku-Solver
-A sudoku game with a built in solver 
+Classic Sudoku with a randomizer, solver, and board creator

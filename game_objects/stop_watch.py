@@ -1,5 +1,6 @@
-from text_box import Text
 from datetime import datetime
+
+from text_box import Text
 from settings import BoardSettings
 
 class StopWatch:
@@ -40,11 +41,14 @@ class StopWatch:
             return seconds_left
         
         def update_text():
-            if self.mins_run < 10:
-                self.mins_run = '0' + str(self.mins_run)
-            if self.secs_run < 10:
-                self.secs_run = '0' + str(self.secs_run)
-            
+            def add_zero_place_holder():
+                if self.mins_run < 10:
+                    self.mins_run = '0' + str(self.mins_run)
+                if self.secs_run < 10:
+                    self.secs_run = '0' + str(self.secs_run)
+                
+            add_zero_place_holder()
+                
             self.time_text = str(self.hours_run) + ':' + str(self.mins_run) + ':' + str(self.secs_run)
             self.time_text = Text(self.time_text, 75, (0, 0, 0), (0,0))
             self.time_text.text_rect.right = BoardSettings.width - self.marginx
@@ -52,9 +56,11 @@ class StopWatch:
 
         self.elasped_time = datetime.now() - self.start_time
         self.elasped_secs = self.elasped_time.seconds
+        
         self.hours_run = hours_left_in(self.elasped_secs)
         self.mins_run = mins_left_in(self.elasped_secs)
         self.secs_run = secs_left_in(self.elasped_secs)
+        
         update_text()
         
     def reset(self):

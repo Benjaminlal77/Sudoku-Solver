@@ -1,10 +1,10 @@
 import pygame 
 import random
 
+from settings import GameSettings, BoardSettings, BoardBoxSettings        
+from text_box import Text
 from events import check_events_while_solving
 from update import update_screen_while_solving
-from settings import BoardSettings, BoardBoxSettings        
-from text_box import Text
 
 class SudokuBoard:
     class BoardOutline:
@@ -23,6 +23,8 @@ class SudokuBoard:
             self.box_num = box_num
             self.unsolved_box_num = 0
             
+            # Define location
+            
             self.column = self.get_column()
             self.row = self.get_row()
             self.large_box = self.get_large_box()
@@ -30,8 +32,9 @@ class SudokuBoard:
             
             self.nums_tried = []
             self.correct_num = None
-            self.solved = False
+
             self.selected = False
+            self.solved = False
             
             self.make_border()
             self.make_box()
@@ -99,46 +102,28 @@ class SudokuBoard:
                 return 9
             
         def is_in_first_large_box_column(self):
-            if self.column >= 1 and self.column <= 3:
-                return True
-            else:
-                return False
+            return self.column >= 1 and self.column <= 3
             
         def is_in_second_large_box_column(self):
-            if self.column >= 4 and self.column <= 6:
-                return True
-            else:
-                return False
+            return self.column >= 4 and self.column <= 6
         
         def is_in_third_large_box_column(self):
-            if self.column >= 7 and self.column <= 9:
-                return True
-            else:
-                return False
+            return self.column >= 7 and self.column <= 9
             
         def is_in_first_large_box_row(self):
-            if self.row >= 1 and self.row <= 3:
-                return True
-            else:
-                return False
+            return self.row >= 1 and self.row <= 3
             
         def is_in_second_large_box_row(self):
-            if self.row >= 4 and self.row <= 6:
-                return True
-            else:
-                return False
+            return self.row >= 4 and self.row <= 6
         
         def is_in_third_large_box_row(self):
-            if self.row >= 7 and self.row <= 9:
-                return True
-            else:
-                return False
-            
-           
+            return self.row >= 7 and self.row <= 9
+                    
         def get_cords(self):
             def find_outlines_passed():
                 self.num_of_column_outline_passed = 0
                 self.num_of_row_outline_passed = 0
+                
                 if self.is_in_first_large_box_column():
                     self.num_of_column_outline_passed = 1
                 elif self.is_in_second_large_box_column():
@@ -155,16 +140,36 @@ class SudokuBoard:
          
             find_outlines_passed()
                 
-            x = ((self.column * BoardBoxSettings.box_width)
-                - BoardBoxSettings.box_width) + (BoardSettings.outline_size * self.num_of_column_outline_passed)
-            y = ((self.row * BoardBoxSettings.box_height)
-                - BoardBoxSettings.box_height) + (BoardSettings.outline_size * self.num_of_row_outline_passed)
+            x = (self.column * BoardBoxSettings.box_width) - BoardBoxSettings.box_width
+            x += (BoardSettings.outline_size * self.num_of_column_outline_passed)
+            
+            y = (self.row * BoardBoxSettings.box_height) - BoardBoxSettings.box_height
+            y += BoardSettings.outline_size * self.num_of_row_outline_passed
+            
             return x,y
+               
+        def is_first_unsolved_box(self):
+            return self.unsolved_box_num == 1
+               
+        def is_last_box(self):
+            return self.box_num == SudokuBoard.num_of_boxes
+               
+        def is_clicked(self):
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            return self.box.collidepoint(mouse_x, mouse_y)
+
+        def is_solved(self, num_input):
+            return num_input == self.correct_num
+                
+        def tried_all_nums(self):
+            return len(self.nums_tried) == 9
                 
         def make_box(self):
             self.box = pygame.Rect(0, 0, 0, 0)
+            
             self.box.x = self.x + BoardBoxSettings.border_size
             self.box.y = self.y + BoardBoxSettings.border_size
+            
             self.box.w = BoardBoxSettings.box_width - (BoardBoxSettings.border_size * 2)
             self.box.h = BoardBoxSettings.box_height - (BoardBoxSettings.border_size * 2)
         
@@ -172,10 +177,13 @@ class SudokuBoard:
                 
         def make_border(self):
             self.border = pygame.Rect(0,0,0,0)
+            
             self.border.x = self.x
             self.border.y = self.y
+            
             self.border.w = BoardBoxSettings.border_width
             self.border.h = BoardBoxSettings.border_height
+            
             self.border_color = BoardBoxSettings.border_color
             
         def prep_num(self):
@@ -189,26 +197,15 @@ class SudokuBoard:
         def draw_box(self, screen):
             screen.fill(self.border_color, self.border)
             screen.fill(self.box_color, self.box)
+            
             if self.solved:
                 screen.blit(self.num_text.text_image, self.num_text.text_rect)
-    
-        def is_clicked(self):
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if self.box.collidepoint(mouse_x, mouse_y):
-                return True
-            else:
-                return False
 
-        def is_solved(self, num_input):
-            if num_input == self.correct_num:
-                return True
-            else:
-                return False
-            
     num_of_possible_nums = 9
     num_of_boxes_in_column = 9
     num_of_boxes_in_row = 9
     num_of_boxes = num_of_boxes_in_column * num_of_boxes_in_row
+    
     def __init__(self):
         self.outline = self.BoardOutline()
         self.boxes = [self.Box(num) for num in range(1, SudokuBoard.num_of_boxes + 1)]    
@@ -218,9 +215,38 @@ class SudokuBoard:
         self.solve_speed = BoardSettings.solve_speed
 
         self.randomize_board()
-        
+
+
+    def check_if_solved(self):
         for box in self.boxes:
-            box.prep_num()
+            if box.solved:
+                if box.is_last_box():
+                    self.solved = True
+            else:
+                self.solved = False
+                break
+    
+    def check_for_box_select(self, stats):
+        for box in self.boxes:
+            box.selected = False
+            if box.is_clicked():
+                if not box.solved:
+                    box.selected = True
+                elif stats.creating_board:
+                    box.selected = True
+    
+    def update_unsolved_boxes(self):
+        self.clear_unsolved_nums()
+        unsolved_box_num = 0
+        for box in self.boxes:
+            if not box.solved:
+                unsolved_box_num += 1
+                box.unsolved_box_num = unsolved_box_num
+            
+    def clear_unsolved_nums(self):
+        for box in self.boxes:
+            if not box.solved:
+                box.correct_num = None
     
     def find_empty_box(self):
         for box in self.boxes:
@@ -251,7 +277,7 @@ class SudokuBoard:
             if not box:
                 return True
             
-            while len(box.nums_tried) < 9:
+            while not box.tried_all_nums():
                 num_to_try = random.randint(1, SudokuBoard.num_of_possible_nums)
                 if num_to_try not in box.nums_tried:
                     box.nums_tried.append(num_to_try)
@@ -262,38 +288,35 @@ class SudokuBoard:
                     box.correct_num = num_to_try
                     if randomize():
                         return True
-                        
-                    box.correct_num = None
-                    continue
+                    else:                        
+                        box.correct_num = None
+                        continue
                         
             box.nums_tried.clear()
             return False
                       
         def randomize_nums_solved():
-            while self.boxes_solved < BoardSettings.boxes_solved_to_start:
+            while self.boxes_solved < GameSettings.boxes_solved_to_start:
                 for box in self.boxes:
-                    if random.randint(1, SudokuBoard.num_of_boxes) == 1 and not box.solved:
-                        self.boxes_solved += 1
-                        box.solved = True
+                    if not box.solved:
+                        chance = random.randint(1, SudokuBoard.num_of_boxes) == 1
+                        if chance:
+                            self.boxes_solved += 1
+                            box.solved = True
                 
         randomize()
         randomize_nums_solved()
                 
-    def reset(self):
-        self.boxes_solved = 0
-        for box in self.boxes:   
-            box.selected = False  
-            box.correct_num = None
-            box.nums_tried.clear()
-            box.solved = False   
-        
+        for box in self.boxes:
+            box.prep_num()
+                
     def solve(self, screen, game_objects, stats):
         box = self.find_empty_box()
                     
         if not box:
             return True
         
-        if box.unsolved_box_num == 1 and len(box.nums_tried) == 9:
+        if box.is_first_unsolved_box() and box.tried_all_nums():
             return False
         
         for num_to_try in range(1, SudokuBoard.num_of_possible_nums + 1):  
@@ -306,36 +329,27 @@ class SudokuBoard:
                 check_events_while_solving(stats)
                 if not stats.fast_solve:
                     update_screen_while_solving(screen, game_objects)
-
-                    pygame.display.flip()
                     pygame.time.Clock().tick(self.solve_speed)
                 
                 if self.solve(screen, game_objects, stats):
                     return True
                 
-                box.correct_num = None
-                box.solved = False
-                box.border_color = (255, 0, 0)
-                box.make_border()
+                else:                
+                    box.correct_num = None
+                    box.solved = False
+                    box.border_color = (255, 0, 0)
+                    box.make_border()
             
         return False
             
-    def check_if_solved(self):
-        for box in self.boxes:
-            if box.solved:
-                if box.box_num == SudokuBoard.num_of_boxes:
-                    self.solved = True
-            else:
-                self.solved = False
-                break
-    
-    def update_unsolved_boxes(self):
-        unsolved_box_num = 0
-        for box in self.boxes:
-            if not box.solved:
-                unsolved_box_num += 1
-                box.unsolved_box_num = unsolved_box_num
-                    
+    def reset(self):
+        self.boxes_solved = 0
+        for box in self.boxes:   
+            box.selected = False  
+            box.correct_num = None
+            box.nums_tried.clear()
+            box.solved = False   
+                                   
     def draw_board(self, screen):
         self.outline.draw_outline(screen)
         for box in self.boxes:

@@ -4,11 +4,16 @@ from settings import BoardSettings
 
 class Strike(Sprite):
     def __init__(self, strike_num):
+        
+        # Define properties
+        
         super().__init__()
         self.strike_num = strike_num
         self.margin = 10
         self.size = 50
         self.width = self.height = self.size
+        
+        # Define cords
         
         self.rect = pygame.Rect(0, 0, 0, 0)
         self.rect.x = ((self.strike_num * self.size) - self.size) + self.margin
