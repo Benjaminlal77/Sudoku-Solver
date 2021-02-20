@@ -1,6 +1,6 @@
 import pygame
-from settings import GameSettings, BoardBoxSettings
-from text_box import CreateBoardControlsTextBox, FastSolveTextBox, ImpossibleBoardTextBox
+from game_functions.settings import GameSettings, BoardBoxSettings
+from game_objects.text_box import CreateBoardControlsTextBox, FastSolveTextBox, ImpossibleBoardTextBox
 
 def update_screen(screen, game_objects, stats):         
     def draw_game_objects():

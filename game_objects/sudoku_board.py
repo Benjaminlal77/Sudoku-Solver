@@ -1,10 +1,10 @@
 import pygame 
 import random
 
-from settings import GameSettings, BoardSettings, BoardBoxSettings        
-from text_box import Text
-from events import check_events_while_solving
-from update import update_screen_while_solving
+from game_functions.settings import GameSettings, BoardSettings, BoardBoxSettings        
+from game_objects.text_box import Text
+from game_functions.events import check_events_while_solving
+from game_functions.update import update_screen_while_solving
 
 class SudokuBoard:
     class BoardOutline:

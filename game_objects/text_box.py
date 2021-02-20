@@ -1,5 +1,5 @@
 import pygame
-from settings import GameSettings
+from game_functions.settings import GameSettings
 
 class Text:
     def __init__(self, text, text_size, text_color, center_cords, background_color = None):

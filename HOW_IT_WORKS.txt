@@ -1,0 +1,36 @@
+The solving and randomizer both use similar algorithms to back track. 
+The main idea of using this back tracking algorithm, is to call the method in side the method. 
+```
+def randomize():    
+    box = self.find_empty_box()
+
+    if not box:
+        return True
+
+    while not box.tried_all_nums():
+        num_to_try = random.randint(1, SudokuBoard.num_of_possible_nums)
+        if num_to_try not in box.nums_tried:
+            box.nums_tried.append(num_to_try)
+        else:
+            continue
+
+        if self.num_is_valid(box, num_to_try):
+            box.correct_num = num_to_try
+            if randomize():
+                return True
+            else:                        
+                box.correct_num = None
+                continue
+
+    box.nums_tried.clear()
+    return False
+```
+As shown from snippet above, the algorithm will first get the first unsolved box on the board. 
+When it finds a valid number (Lines 11 - 17), it will then set the box's correct number to that number. 
+Following that, it goes through the method once more to find a valid number for the next box. 
+However, at some point the box can have tried all possible numbers meaning that it has no solution. 
+On this event, it breaks out of the loop and then returns False from the function (Line 26).
+But because the function was called by the box before, it then moves to (Lines 22 & 23)
+which resets number from before, then goes on to find another valid number.
+Finally, when it cannot find another unsolved box (Line 7), it will return True which causes it to return 
+True over and over again (Line 20) until it comes out of the function with a fully randomized, or solved board.

@@ -1,8 +1,8 @@
 import pygame
-from update import update_screen
+from game_functions.update import update_screen
 
-from settings import GameSettings, ButtonSettings
-from text_box import Text
+from game_functions.settings import GameSettings, ButtonSettings
+from game_objects.text_box import Text
     
 class Button:
     def __init__(self, button_num, text):
