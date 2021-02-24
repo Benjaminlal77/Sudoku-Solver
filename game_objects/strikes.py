@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from game_functions.settings import BoardSettings
+from game_data.settings import BoardSettings
 
 class Strike(Sprite):
     def __init__(self, strike_num):

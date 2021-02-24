@@ -1,7 +1,7 @@
 import pygame 
 import random
 
-from game_functions.settings import GameSettings, BoardSettings, BoardBoxSettings        
+from game_data.settings import GameSettings, BoardSettings, BoardBoxSettings        
 from game_objects.text_box import Text
 from game_functions.events import check_events_while_solving
 from game_functions.update import update_screen_while_solving

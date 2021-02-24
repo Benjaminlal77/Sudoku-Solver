@@ -1,7 +1,7 @@
 import pygame
 from game_functions.update import update_screen
 
-from game_functions.settings import GameSettings, ButtonSettings
+from game_data.settings import GameSettings, ButtonSettings
 from game_objects.text_box import Text
     
 class Button:

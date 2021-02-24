@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from game_objects.text_box import Text
-from game_functions.settings import BoardSettings
+from game_data.settings import BoardSettings
 
 class StopWatch:
     def __init__(self):

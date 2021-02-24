@@ -1,6 +1,6 @@
 import pygame
-from game_functions.settings import GameSettings
-from game_functions.stats import GameStats
+from game_data.settings import GameSettings
+from game_data.stats import GameStats
 from game_functions.events import check_events, check_events_while_creating_board
 from game_functions.update import update_screen, update_screen_while_creating_board
 from game_functions.game_over import check_if_game_over

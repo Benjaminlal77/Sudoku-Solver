@@ -1,5 +1,5 @@
 import pygame
-from game_functions.settings import GameSettings
+from game_data.settings import GameSettings
 from game_objects.text_box import Text
 
 def write_result(screen, result):
